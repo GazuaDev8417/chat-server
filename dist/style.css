@@ -13,11 +13,16 @@
     padding: 10px;
     border: 1px solid;
     border-radius: 10px;
+    background-color: lightgreen;
 }
 
 .messageInfo{
     display: flex;
     justify-content: space-between;
+}
+
+.left .foreign{
+    background-color: blue;
 }
 
 .bottomNavigation input[type='text']{
