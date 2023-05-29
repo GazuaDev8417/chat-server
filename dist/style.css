@@ -1,0 +1,25 @@
+.messageContainer{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.left{
+    justify-content: flex-start;
+}
+
+.message{
+    margin: 5px;
+    width: 25%;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 10px;
+}
+
+.messageInfo{
+    display: flex;
+    justify-content: space-between;
+}
+
+.bottomNavigation input[type='text']{
+    width: 95%;
+}
