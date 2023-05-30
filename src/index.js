@@ -10,12 +10,15 @@ let user = JSON.parse(localStorage.getItem('user'))
 
 messages.scrollTop = messages.scrollHeight
 
+document.getElementById('userName').innerHTML = user.nickname
+
 fetch('http://localhost:3003/users').then(res => res.json()).then(data=>{
     const filtered = data.filter(item => item.nickname !== user.nickname)
+
     userList.innerHTML = filtered.map(user=>{
         return`            
             <p class='user'>
-                <img src='https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp'>
+                <i class="fa-solid fa-user icon"></i>
                 ${user.nickname}
             </p>
         `
@@ -105,7 +108,7 @@ socket.on('receivedMessage', response=>{
    
     const date = document.createElement('p')
     date.classList.add('date')
-    date.innerText = new Date().toLocaleTimeString()    
+    date.innerHTML = `<small>${new Date().toLocaleTimeString()}</small>`    
    
     const textContainer = document.createElement('div')
     textContainer.classList.add('textContainer')

@@ -12,21 +12,22 @@
 </head>
 <body>
     <header>
-        <div></div>
-        <h1>Chat</h1>
-        <i  
-            id="logout"
-            class="fa-solid fa-arrow-right-from-bracket icon"></i>
+        <h1>Chat</h1>        
     </header>
     <aside class="users">
         <i  
-            onclick="location.href='../profile/index.html'"
-            class="fa-solid fa-user icon"></i>
+            id="logout"
+            class="fa-solid fa-arrow-right-from-bracket logout"></i>
+        <div class="userHeader">
+            <i  
+              class="fa-solid fa-user icon"></i>
+            <span id="userName"></span>
+        </div>
         <div class="user-list"></div>
     </aside>
     <main>
         <div class="messages">
-            <!-- <div class="messages">
+            <div class="messages">
                 <div class="messageContainer left">
                     <div class="message foreign">
                         <div class="messageInfo">
@@ -49,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
         <div class="bottomNavigation">
             <input type="text" id="input" autofocus>
