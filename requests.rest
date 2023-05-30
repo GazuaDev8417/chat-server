@@ -1,0 +1,21 @@
+POST http://localhost:3003/signup
+Content-Type: application/json
+
+{
+    "nickname": "Só uma da mais forte"
+}
+
+###
+POST http://localhost:3003/messages
+Content-Type: application/json
+
+{
+    "sender": "oxen",
+    "message": "se ligue "
+}
+
+###
+GET http://localhost:3003/users
+
+###
+DELETE http://localhost:3003/signout/88gdf40cgd

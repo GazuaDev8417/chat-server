@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Ysabeau:ital,wght@1,100&display=swap');
+
+body{
+    margin: 0;
+    display: grid;
+    height: 100vh;
+    grid-template-areas:
+    "users header"
+    "users main";
+    grid-template-columns: 25vw 1fr;
+    grid-template-rows: 7vh 1fr;
+}
+
+header{
+    grid-area: header;
+    border-bottom: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+
+    @media(max-width: 600px){
+        height: 5vh;
+    }
+}
+
+header h1{
+    font-family: 'Ysabeau', sans-serif;
+
+    @media(max-width: 600px){
+        font-size: 1em;
+    }
+}
+
+header .icon{
+    font-size: 2em;
+    cursor: pointer;
+
+    @media(max-width: 600px){
+        font-size: 1em;
+    }
+}
+
+aside .icon{
+    background-color: yellowgreen;
+    box-shadow: 3px 3px 6px green;
+    border-radius: 50%;
+    padding: 10px;
+    font-size: 2em;
+    margin: 20px;
+}
+
+.users{
+    grid-area: users;
+    border-right: 1px solid;
+}
+
+.users .user-list{
+    margin: 10px;
+}
+
+.users .user-list p{
+    display: flex;
+}
+
+.users .user-list img{
+    width: 20px;
+    margin-right: 10px;
+}
+
+
+main{
+    display: grid;
+    grid-template-areas: 
+    "messages"
+    "input";
+    grid-template-rows: 1fr 5vh;
+}
+
+.messages{
+    grid-area: messages;
+}
+
+.bottomNavigation{
+    grid-area: input;
+    display: flex;    
+    justify-content: space-between;
+}
+
+.messageContainer{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.message{
+    margin: 15px 30px;
+    width: 25%;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 10px;
+    box-shadow: 3px 3px 6px;
+}
+
+.left{
+    justify-content: flex-start;
+}
+
+.left .foreign{
+    
+}
+
+.messageInfo{
+    display: flex;
+    justify-content: space-between;
+}
+
+.bottomNavigation input[type='text']{
+    width: 90%;
+}
+
+.bottomNavigation button{
+    right: 0;
+    width: 10%;
+}
