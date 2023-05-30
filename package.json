@@ -1,10 +1,21 @@
 {
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "npx webpack && nodemon server.js"
+    "start": "npx webpack && node index.js",
+    "dev": "npx webpack && nodemon index.js",
+    "migration": "node ./src/connection/migration.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2",
+    "mysql": "^2.18.1",
     "socket.io": "^4.6.1",
     "socket.io-client": "^4.6.1",
     "webpack": "^5.84.1",
