@@ -33,7 +33,10 @@ io.on('connection', socket=>{
     })   
 })
 
-
+// SHOW PAGES
+app.get('/', (req, res)=>{
+    res.sendFile('index.html')
+})
 
 // =================ENTER WITH USER============================
 app.post('/signup', (req, res)=>{
