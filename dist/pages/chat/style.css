@@ -23,7 +23,6 @@ body{
     top: 1.5vh;
     left: 21.5vw;
     cursor: pointer;
-    /* background-color: yellowgreen; */
     box-shadow: 3px 3px 6px green;
     border-radius: 50%;
     padding: 10px;
@@ -58,14 +57,35 @@ header h1{
     }
 }
 
+aside .userHeader{
+    border-bottom: 1px solid;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 10px 30px;
+    margin-bottom: 7vh;
+}
+
 aside .userHeader .icon{
-    /* background-color: yellowgreen; */
     box-shadow: 3px 3px 6px green;
     border-radius: 50%;
     padding: 10px;
     font-size: 2em;
-    margin: 20px;
     cursor: pointer;
+}
+
+#imgProfile{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 2em;
+    cursor: pointer;
+    box-shadow: 3px 3px 6px;
+}
+
+#imgProfile:active{
+    transform: scale(0.8);
 }
 
 aside .icon:hover{
@@ -76,6 +96,17 @@ aside .icon:hover{
 aside .icon:active{
     transform: scale(0.8);
 }
+
+/* .popup-prfile-photo{
+    opacity: 0;
+    position: absolute;
+    top: 7vh;
+    left: 5.5vw;
+    background-color: lightblue;
+    padding: 15px;
+    border-radius: 10px;
+    border-top-left-radius: 1px;
+} */
 
 .users{
     grid-area: users;
@@ -92,6 +123,19 @@ aside .icon:active{
 
 .users .user-list .icon{
     background-color: yellowgreen;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.user-list .icon:hover{
+    background-color: green;
+    box-shadow: 3px 3px 6px green;
+}
+
+.user-list .user{
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
 }
 
 

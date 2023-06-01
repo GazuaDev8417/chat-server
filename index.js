@@ -77,9 +77,9 @@ app.patch('/changeid/:name', (req, res)=>{
 })
 
 // =========================GET USER BY NAME========================
-app.get('/user/:id', (req, res)=>{
+app.get('/user/:name', (req, res)=>{
     con.query(`
-        SELECT * FROM chat_users WHERE id = '${req.params.id}'
+        SELECT * FROM chat_users WHERE nickname = '${req.params.name}'
     `, (error, user)=>{
         if(error){
             res.status(500).send()
@@ -91,10 +91,11 @@ app.get('/user/:id', (req, res)=>{
 
 // ===========================SEND MESSAGES========================
 app.post('/messages', (req, res)=>{
-    const { sender, message } = req.body    
+    const { id, sender, message, sentAt } = req.body    
+    console.log("backend: ",req.body)
     const getuser = `SELECT * FROM chat_users WHERE nickname = '${sender}'`
-    const sql = `INSERT INTO chat_messages VALUES(?,?,?)`
-    const id = Date.now().toString(18)
+    const sql = `INSERT INTO chat_messages VALUES(?,?,?,?)`
+    // const id = Date.now().toString(18)
 
 
     con.query(getuser, (error, user)=>{
@@ -102,7 +103,7 @@ app.post('/messages', (req, res)=>{
             res.status(404).send(`Usuário não encontrado: ${error}`)
         }else{
             if(user.length > 0){
-                con.query(sql, [id, user[0].nickname, message], error=>{
+                con.query(sql, [id, user[0].nickname, message, sentAt], error=>{
                     if(error){
                         res.status(500).send(`Falha ao enviar messagem: ${error}`)
                     }else{

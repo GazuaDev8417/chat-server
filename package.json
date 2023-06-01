@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx webpack && node index.js",
-    "dev": "npx webpack && nodemon index.js",
+    "start": "npx webpack --mode=production && node index.js",
+    "dev": "npx webpack --mode=development && nodemon index.js",
     "migration": "node ./src/connection/migration.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.1.3",
     "express": "^4.18.2",
     "mysql": "^2.18.1",
     "socket.io": "^4.6.1",
