@@ -1,6 +1,6 @@
 const io = require('socket.io-client')
-const url = 'https://chat-0q7t.onrender.com'
-// const url = 'http://localhost:3003'
+// const url = 'https://chat-0q7t.onrender.com'
+const url = 'http://localhost:3003'
 const socket = io(url)
 const userList = document.querySelector('.user-list')
 const send = document.getElementById('send')
@@ -10,13 +10,13 @@ const popup = document.querySelector('.popup-prfile-photo')
 const inputFile = document.getElementById('inputFile')
 const imgProfile = document.getElementById('imgProfile')
 const input = document.getElementById('input')
-let user = JSON.parse(localStorage.getItem('user'))
+let user = localStorage.getItem('user')
 let users
 
 
 
 document.scrollTop = messages.scrollHeight
-document.getElementById('userName').innerHTML = user.nickname
+document.getElementById('userName').innerHTML = user
 
 currentUserIcon.addEventListener('click', ()=>{
     inputFile.click()
@@ -41,7 +41,7 @@ inputFile.addEventListener('change', ()=>{
 
 
 fetch(`${url}/users`).then(res => res.json()).then(data=>{
-    const filtered = data.filter(item => item.nickname !== user.nickname)
+    const filtered = data.filter(item => item.nickname !== user)
     users = data
 
     userList.innerHTML = filtered.map(user=>{
@@ -60,8 +60,14 @@ document.getElementById('logout').addEventListener('click', ()=>{
     const decide = window.confirm('Tem certeza que deseja sair do chat')
     
     if(decide){
-        localStorage.clear()
-        location.href = '../../index.html'
+        fetch(`${url}/signout/${user.nickname}`, {
+            method:'DELETE',
+        }).then(res => res.text()).then(()=>{
+            localStorage.clear()
+            location.href = '../../index.html'
+        }).catch(e=>{
+            alert(e.message)
+        })
     }
 })
 
@@ -75,17 +81,27 @@ socket.on('welcome', id=>{
 
 send.addEventListener('submit', (event)=>{
     event.preventDefault()
-    socket.emit('message', input.value)
+    const messageData = {
+        sender: user,
+        message: input.value
+    }
+    socket.emit('message', messageData)
     input.value = ''
     input.focus()
 })
 
+
+
 socket.on('receivedMessage', response=>{
-    const isOur = response.userId === userId
+    const isOur = response.sender === user
+    const mediaQuery = matchMedia('(max-width: 600px)')
 
     const messageContainer = document.createElement('div')
     messageContainer.classList.add('messageContainer')
     if(!isOur) messageContainer.classList.add('left')
+    if(mediaQuery.matches){     
+        if(isOur) messageContainer.classList.add('right')
+    }
     
     const innerMessage = document.createElement('div')
     innerMessage.classList.add('message')
@@ -96,8 +112,7 @@ socket.on('receivedMessage', response=>{
     
     const username = document.createElement('p')
     username.classList.add('username')
-    const userNickname = users.filter(username => username.nickname === user.nickname)
-    username.innerHTML = userNickname[0].nickname
+    username.innerHTML = response.sender
     
     const date = document.createElement('p')
     date.classList.add('date')
@@ -108,14 +123,13 @@ socket.on('receivedMessage', response=>{
     
     const textParagraph = document.createElement('p')
     textParagraph.innerText = response.message
-
+    
     messageContainer.appendChild(innerMessage)
     innerMessage.appendChild(messageInfo)
     messageInfo.appendChild(username)
     messageInfo.appendChild(date)
     innerMessage.appendChild(textContainer)
     textContainer.appendChild(textParagraph)
-
-    // const mainMessageContainer = document.getElementsByClassName('messages')
+    
     messages.appendChild(messageContainer)
 })

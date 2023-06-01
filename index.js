@@ -14,7 +14,7 @@ const options = {
 }
 
 const server = app.listen(3003, ()=>{
-    console.log('Servidor rondando em https://chat-0q7t.onrender.com')
+    console.log('Servidor rondando em na porta 3003')
 })
 
 const io = new Server(server, options)
@@ -27,8 +27,8 @@ io.on('connection', socket=>{
     socket.join('room1')
     socket.on('message', message=>{
         io.to('room1').emit('receivedMessage', {
-            userId: socket.id,
-            message: message
+            sender: message.sender,
+            message: message.message
         })
     })   
 })
@@ -46,9 +46,13 @@ app.post('/signup', (req, res)=>{
                            
     con.query(sql, [id, nickname], error=>{
         if(error){
-            res.status(500).send(`Falha ao registrar usuário: ${error}`)
+            if(error.code === 'ER_DUP_ENTRY'){
+                res.status(406).send(`Jà existe um usuário com esse nome`)
+            }else{
+                res.status(500).send(`Falha so registrar usuário: ${error}`)
+            }
         }else{
-            res.status(201).send({id, nickname})                    
+            res.status(201).send(nickname)                    
         }
     })
 })
@@ -146,9 +150,9 @@ app.delete('/signout/:name', (req, res)=>{
                 if(error){
                     res.status(500).send(`Erro ao deslogar usuário: ${error}`)
                 }else{
-                    con.query(`
-                        DELETE FROM chat_messages WHERE sender = '${user[0].nickname}'
-                    `)
+                    // con.query(`
+                    //     DELETE FROM chat_messages WHERE sender = '${user[0].nickname}'
+                    // `)
                     res.send(`${user[0].nickname} deslogado`)
                 }
             })

@@ -1,5 +1,6 @@
 const nickname = document.getElementById('nickname')
-const url = 'https://chat-0q7t.onrender.com'
+// const url = 'https://chat-0q7t.onrender.com'
+const url = 'http://localhost:3003'
 
 
 window.addEventListener('load', ()=>{
@@ -22,8 +23,8 @@ document.getElementById('form').addEventListener('submit', (e)=>{
             'Content-type': 'application/json'
         },
         body: JSON.stringify(body)
-    }).then(res => res.json()).then(data=>{
-        localStorage.setItem('user', JSON.stringify(data))
+    }).then(res => res.text()).then(data=>{
+        localStorage.setItem('user', data)
         location.href = './pages/chat/index.html'
     }).catch(e=>{
         alert(e.message)
