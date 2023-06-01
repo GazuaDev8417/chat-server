@@ -1,6 +1,6 @@
 const io = require('socket.io-client')
-// const url = 'https://chat-0q7t.onrender.com'
-const url = 'http://localhost:3003'
+const url = 'https://chat-0q7t.onrender.com'
+// const url = 'http://localhost:3003'
 const socket = io(url)
 const userList = document.querySelector('.user-list')
 const send = document.getElementById('send')
@@ -99,9 +99,16 @@ socket.on('receivedMessage', response=>{
     const messageContainer = document.createElement('div')
     messageContainer.classList.add('messageContainer')
     if(!isOur) messageContainer.classList.add('left')
-    if(mediaQuery.matches){     
-        if(isOur) messageContainer.classList.add('right')
+
+    const ifMatchesChange = ()=>{
+        if(mediaQuery.matches){     
+            if(isOur) messageContainer.classList.add('right')
+        }else{
+            messageContainer.classList.add('left')
+        }
     }
+
+    mediaQuery.addEventListener('change', ifMatchesChange)
     
     const innerMessage = document.createElement('div')
     innerMessage.classList.add('message')

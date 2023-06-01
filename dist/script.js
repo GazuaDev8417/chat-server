@@ -1,6 +1,6 @@
 const nickname = document.getElementById('nickname')
-// const url = 'https://chat-0q7t.onrender.com'
-const url = 'http://localhost:3003'
+const url = 'https://chat-0q7t.onrender.com'
+// const url = 'http://localhost:3003'
 
 
 window.addEventListener('load', ()=>{
