@@ -10,7 +10,8 @@ POST http://localhost:3003/messages
 Content-Type: application/json
 
 {
-    "sender": "oxen",
+    "id": "1", 
+    "sender": "onda",
     "message": "se ligue "
 }
 
