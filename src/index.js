@@ -1,13 +1,15 @@
 const io = require('socket.io-client')
-const socket = io('http://localhost:3003')
+// const url = 'https://chat-0q7t.onrender.com'
+const url = 'http://localhost:3003'
+const socket = io(url)
 const userList = document.querySelector('.user-list')
-const input = document.getElementById('input')
 const send = document.getElementById('send')
 const messages = document.querySelector('.messages')
 const currentUserIcon = document.getElementById('user')
 const popup = document.querySelector('.popup-prfile-photo')
 const inputFile = document.getElementById('inputFile')
 const imgProfile = document.getElementById('imgProfile')
+const input = document.getElementById('input')
 let user = JSON.parse(localStorage.getItem('user'))
 let users
 
@@ -49,7 +51,7 @@ inputFile.addEventListener('change', ()=>{
 })
 
 
-fetch('http://localhost:3003/users').then(res => res.json()).then(data=>{
+fetch(`${url}/users`).then(res => res.json()).then(data=>{
     const filtered = data.filter(item => item.nickname !== user.nickname)
     users = data
 
@@ -69,7 +71,7 @@ document.getElementById('logout').addEventListener('click', ()=>{
     const decide = window.confirm('Tem certeza que deseja sair do chat')
     
     if(decide){
-        fetch(`http://localhost:3003/signout/${user.nickname}`, {
+        fetch(`https://chat-0q7t.onrender.com/signout/${user.nickname}`, {
             method:'DELETE'
         }).then(res => res.text()).then(()=>{
             localStorage.clear()
@@ -85,23 +87,6 @@ let userId
 
 socket.on('welcome', id=>{
     userId = id
-
-    // const body = {
-    //     userId: id
-    // }
-    
-    // fetch(`http://localhost:3003/changeid/${user.nickname}`, {
-    //     method:'PATCH',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(body)
-    // }).then(res => res.text()).then(()=>{
-    //      user.id = id
-    //      localStorage.setItem('user', JSON.stringify(user))
-    // }).catch(e=>{
-    //     alert(e.message)
-    // })
 })
 
 
@@ -116,7 +101,7 @@ send.addEventListener('submit', (event)=>{
         message: input.value,
         sentAt: new Date().toLocaleTimeString()
     }
-    fetch('http://localhost:3003/messages', {
+    fetch(`${url}/messages`, {
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -131,7 +116,7 @@ send.addEventListener('submit', (event)=>{
 })
 
 
-fetch('http://localhost:3003/messages').then(res => res.json()).then(data=>{
+fetch(`${url}/messages`).then(res => res.json()).then(data=>{
     const messagesByDate = data.sort((a, b)=>{
         return a.sentAt - b.sentAt
     })
