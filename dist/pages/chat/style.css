@@ -240,6 +240,10 @@ main{
 
 .bottomNavigation input[type='text']{
     width: 90%;
+
+    @media(max-width: 600px){
+        width: 84vw;
+    }
 }
 
 .bottomNavigation button{
