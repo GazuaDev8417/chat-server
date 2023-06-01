@@ -1,6 +1,6 @@
 const io = require('socket.io-client')
-const url = 'https://chat-0q7t.onrender.com'
-// const url = 'http://localhost:3003'
+// const url = 'https://chat-0q7t.onrender.com'
+const url = 'http://localhost:3003'
 const socket = io(url)
 const userList = document.querySelector('.user-list')
 const send = document.getElementById('send')
@@ -16,19 +16,8 @@ let users
 
 
 document.scrollTop = messages.scrollHeight
-
 document.getElementById('userName').innerHTML = user.nickname
-// document.getElementById('user').addEventListener('mouseover', ()=>{    
-//     popup.style.opacity = 1
-    
-//     setTimeout(()=>{
-//         popup.style.opacity = 0
-//         popup.style.transition = '1.5s'
-//     }, 3000)
-// })
-// currentUserIcon.addEventListener('mouseout', ()=>{
-//     popup.style.opacity = 0
-// })
+
 currentUserIcon.addEventListener('click', ()=>{
     inputFile.click()
 })
@@ -71,14 +60,8 @@ document.getElementById('logout').addEventListener('click', ()=>{
     const decide = window.confirm('Tem certeza que deseja sair do chat')
     
     if(decide){
-        fetch(`${url}/signout/${user.nickname}`, {
-            method:'DELETE'
-        }).then(res => res.text()).then(()=>{
-            localStorage.clear()
-            location.href = '../../index.html'
-        }).catch(e=>{
-            alert(e.message)
-        })
+        localStorage.clear()
+        location.href = '../../index.html'
     }
 })
 
@@ -92,68 +75,10 @@ socket.on('welcome', id=>{
 
 send.addEventListener('submit', (event)=>{
     event.preventDefault()
-
-    socket.emit('message', input.value)       
-    
-    const body = {
-        id: userId,
-        sender: user.nickname,
-        message: input.value,
-        sentAt: new Date().toLocaleTimeString()
-    }
-    fetch(`${url}/messages`, {
-        method:'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-    }).then(res => res.text()).then(()=>{
-        input.value = ''
-        input.focus()
-    }).catch(e=>{
-        alert(e.message)
-    })
+    socket.emit('message', input.value)
+    input.value = ''
+    input.focus()
 })
-
-
-fetch(`${url}/messages`).then(res => res.json()).then(data=>{
-    const messagesByDate = data.sort((a, b)=>{
-        return a.sentAt - b.sentAt
-    })
-    messages.innerHTML = messagesByDate.map(message=>{
-        const isOur = message.sender === user.nickname
-        if(!isOur){
-            return`
-                <div class="messageContainer left">
-                    <div class="message foreign">
-                        <div class="messageInfo">
-                            <p class="username">${message.sender}</p>
-                            <p class="date">${message.sentAt}</p>
-                        </div>
-                        <div class="textContainer">
-                            <p>${message.message}</p>
-                        </div>
-                    </div>
-                </div>
-            `
-        }else{
-            return`
-            <div class="messageContainer">
-                <div class="message">
-                    <div class="messageInfo">
-                        <p class="username">${message.sender}</p>
-                        <p class="date">${message.sentAt}</p>
-                    </div>
-                    <div class="textContainer">
-                        <p>${message.message}</p>
-                    </div>
-                </div>
-            </div>
-            `
-        }
-    }).join('')
-})
-
 
 socket.on('receivedMessage', response=>{
     const isOur = response.userId === userId

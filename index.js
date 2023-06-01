@@ -7,17 +7,17 @@ const { Server } = require('socket.io')
 const con = require('./sources/connection/connection')
 
 
-//SOCKET CONNECTION
-// const options = {
-//     cors: true,
-//     origin: ['http://localhost:3003']
-// }
+// SOCKET CONNECTION
+const options = {
+    cors: true,
+    origin: ['http://localhost:3003']
+}
 
 const server = app.listen(3003, ()=>{
     console.log('Servidor rondando em http://localhost:3003')
 })
 
-const io = new Server(server)
+const io = new Server(server, options)
 
 app.use(express.static('./dist'))
 
