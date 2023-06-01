@@ -157,7 +157,7 @@ fetch('http://localhost:3003/messages').then(res => res.json()).then(data=>{
                 <div class="message">
                     <div class="messageInfo">
                         <p class="username">${message.sender}</p>
-                        <p class="date">03.12.22 18:13</p>
+                        <p class="date">${message.sentAt}</p>
                     </div>
                     <div class="textContainer">
                         <p>${message.message}</p>
