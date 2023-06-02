@@ -10,7 +10,7 @@ const con = require('./sources/connection/connection')
 // SOCKET CONNECTION
 const options = {
     cors: true,
-    origin: ['https://chat-0q7t.onrender.com']
+    origin: ['https://chat-jcnn.onrender.com']
 }
 
 const server = app.listen(3003, ()=>{
