@@ -1,7 +1,7 @@
 const nickname = document.getElementById('nickname')
 const btn = document.getElementById('submitForm')
 const form = document.getElementById('form')
-const url = 'https://chat-production-6117.up.railway.app'
+const url = 'https://chat-jcnn.onrender.com'
 // const url = 'http://localhost:3003'
 
 

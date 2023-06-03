@@ -1,5 +1,5 @@
 const io = require('socket.io-client')
-const url = 'https://chat-production-6117.up.railway.app'
+const url = 'https://chat-jcnn.onrender.com'
 // const url = 'http://localhost:3003'
 const socket = io(url)
 const userList = document.querySelector('.user-list')

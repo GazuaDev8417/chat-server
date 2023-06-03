@@ -10,7 +10,7 @@ const con = require('./sources/connection/connection')
 // SOCKET CONNECTION
 const options = {
     cors: true,
-    origin: ['https://chat-production-6117.up.railway.app']
+    origin: ['https://chat-jcnn.onrender.com']
     // origin: ['http://localhost:3003']
 }
 
