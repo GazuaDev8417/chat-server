@@ -11,14 +11,9 @@ body{
     grid-template-rows: 7vh 1fr;
 
     @media(max-width: 600px){
-        margin: 0 20px;
-        grid-template-areas:
-        "header header"
-        "users users"
-        "main main";
+        display: flex;
+        flex-direction: column;
     }
-
-    
 }
 
 #userName{
@@ -32,14 +27,11 @@ body{
 }
 
 .logout{
-    position: absolute;
     font-size: 12pt;
-    top: 1.5vh;
-    left: 21.5vw;
     cursor: pointer;
     box-shadow: 3px 3px 6px green;
     border-radius: 50%;
-    padding: 10px;
+    padding: 5px;
 
     @media(max-width: 800px){
         left: 19vw;
@@ -68,14 +60,16 @@ header{
     border-bottom: 1px solid;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding-right: 15px;
 }
 
 header h1{
     font-family: 'Ysabeau', sans-serif;
 
     @media(max-width: 600px){
-        font-size: 1em;
+        font-size: 1.2em;
+        padding: 0;
     }
 }
 
@@ -86,10 +80,10 @@ aside .userHeader{
     align-items: center;
     gap: 20px;
     padding: 20px 10px 20px;
-    margin-bottom: 7vh;
 
     @media(max-width: 600px){
-        margin-bottom: 2vh;
+        padding: 0;
+        border-bottom-left-radius: 0;
     }
 
     @media(max-width: 800px){
@@ -146,10 +140,10 @@ aside .icon:active{
 }
 
 .users .user-list{
-    margin: 10px;
+    overflow: auto;
+    padding-left: 10px;
 
     @media(max-width: 600px){
-        overflow: auto;
         display: flex;
         gap: 10px;
     }
@@ -183,6 +177,10 @@ main{
     "messages"
     "input";
     grid-template-rows: 1fr 5vh;
+    
+    @media(max-width: 600px){
+        height: 100vh;
+    }
 }
 
 .messages{
@@ -225,10 +223,6 @@ main{
 }
 
 .right{
-    /* @media(max-width: 600px){
-        position: relative;
-        left: 27vw;
-    } */
     position: relative;
     left: 20vw;
 }
@@ -248,5 +242,5 @@ main{
 
 .bottomNavigation button{
     right: 0;
-    width: 10%;
+    width: 20%;
 }

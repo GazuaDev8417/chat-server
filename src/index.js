@@ -1,6 +1,6 @@
 const io = require('socket.io-client')
-const url = 'https://chat-jcnn.onrender.com'
-// const url = 'http://localhost:3003'
+// const url = 'https://chat-jcnn.onrender.com'
+const url = 'http://localhost:3003'
 const socket = io(url)
 const userList = document.querySelector('.user-list')
 const send = document.getElementById('send')
@@ -60,7 +60,7 @@ document.getElementById('logout').addEventListener('click', ()=>{
     const decide = window.confirm('Tem certeza que deseja sair do chat')
     
     if(decide){
-        fetch(`${url}/signout/${user.nickname}`, {
+        fetch(`${url}/signout/${user}`, {
             method:'DELETE',
         }).then(res => res.text()).then(()=>{
             localStorage.clear()
@@ -69,6 +69,21 @@ document.getElementById('logout').addEventListener('click', ()=>{
             alert(e.message)
         })
     }
+})
+
+window.addEventListener('unload', ()=>{
+    const decide = window.confirm('Você está prestes a deixar a página, isso fará com que você saia do chat e apague todas as suas conversas?')
+    
+    // if(decide){
+    //     fetch(`${url}/signout/${user}`, {
+    //         method:'DELETE',
+    //     }).then(res => res.text()).then(()=>{
+    //         localStorage.clear()
+    //         // location.href = '../../index.html'
+    //     }).catch(e=>{
+    //         alert(e.message)
+    //     })
+    // }
 })
 
 
