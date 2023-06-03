@@ -1,7 +1,8 @@
 const nickname = document.getElementById('nickname')
 const btn = document.getElementById('submitForm')
-const url = 'https://chat-jcnn.onrender.com'
-// const url = 'http://localhost:3003'
+const form = document.getElementById('form')
+// const url = 'https://chat-jcnn.onrender.com'
+const url = 'http://localhost:3003'
 
 
 window.addEventListener('load', ()=>{
@@ -10,6 +11,11 @@ window.addEventListener('load', ()=>{
     if(user){
         location.href = './pages/chat/index.html'
     }
+
+    form.style.marginTop = '10vh'
+    document.body.style.backgroundImage = "url('https://media.istockphoto.com/id/1218737747/vector/learning-online-e-learning-video-call-chat-with-class-distance-education.jpg?s=612x612&w=0&k=20&c=fFFwc3CTP4XtvmruZLiK8EzAbzvAxJL_kw5BsA7z7w8=')"
+    document.body.style.backgroundSize = 'cover'
+    form.style.transition = '2s'
 })
 
 
@@ -27,22 +33,16 @@ nickname.addEventListener('input', ()=>{
 })
 
 const handleMouseOver = ()=>{
-    btn.style.backgroundColor = 'rgb(5, 66, 5)'
-    btn.style.fontWeight = 'bold'
+    btn.style.backgroundColor = 'rgb(3, 156, 3)'
 }
 
 const handleMouseOut = ()=>{
     btn.style.backgroundColor = 'green'
-    btn.style.fontWeight = 'normal'
 }
 
 
-document.getElementById('form').addEventListener('submit', (e)=>{
+form.addEventListener('submit', (e)=>{
     e.preventDefault()
-    signup()
-})
-
-document.getElementById('submitForm').addEventListener('click', ()=>{
     signup()
 })
 
@@ -57,13 +57,7 @@ const signup = ()=>{
             'Content-type': 'application/json'
         },
         body: JSON.stringify(body)
-    }).then(res=>{
-        if(!res.ok && res.statusText === 'Unauthorized'){
-            throw new Error(`Digite um nome de usuário`)
-        }
-        
-        return res.text()
-    }).then(data=>{
+    }).then(res => res.text()).then(data=>{
         localStorage.setItem('user', data)
         location.href = './pages/chat/index.html'
     }).catch(e=>{

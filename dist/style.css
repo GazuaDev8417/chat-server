@@ -3,8 +3,8 @@ body{
     justify-content: center;
 }
 
-form{
-    margin-top: 10vh;
+#form{
+    margin-top: -20vh;
     font-size: 15pt;
 }
 
@@ -47,7 +47,7 @@ input{
     outline: none;
 }
 
-div{
+button{
     width: 30%;
     height: 35px;
     border-radius: 10px;
@@ -59,8 +59,9 @@ div{
     align-items: center;
     justify-content: center;
     box-shadow: 2px 2px 4px gray;
+    border: none;
 }
 
-div:active{
+button:active{
     transform: scale(0.9);
 }
