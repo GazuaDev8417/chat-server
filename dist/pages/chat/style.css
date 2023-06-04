@@ -136,7 +136,7 @@ aside .userHeader #imgProfile:active{
 aside .userHeader #userName{
     font-family: 'Ysabeau', sans-serif;
     font-size: 2rem;
-    color: green;
+    font-weight: bold;
 
     @media(max-width: 800px){
         font-size: 1.5rem;
@@ -196,14 +196,6 @@ main{
     background-image: url('https://wallpapercave.com/wp/wp4410716.jpg');
 }
 
-.bottomNavigation{
-    grid-area: input;
-    display: flex;
-    align-items: center;    
-    justify-content: space-around;
-    margin: 0 10px;
-}
-
 .messageContainer{
     display: flex;
     justify-content: flex-end;    
@@ -243,6 +235,15 @@ main{
     justify-content: space-between;
 }
 
+
+.bottomNavigation{
+    grid-area: input;
+    display: flex;
+    align-items: center;  
+    justify-content: space-around;
+    margin: 0 10px;
+}
+
 .bottomNavigation input[type='text']{
     width: 85%;
     height: 30px;
@@ -257,9 +258,13 @@ main{
     }
 }
 
+.bottomNavigation #msgTemp{
+    color: gray;
+    font-size: 18pt;
+}
+
 .bottomNavigation button{
-    display: flex;
-    align-items: center;
+    display: none;
     width: 40px;
     height: 40px;
     border: none;
@@ -267,11 +272,11 @@ main{
     cursor: pointer;
 }
 
-.bottomNavigation #sendMessage{
-    font-size: 18pt;
-    color: green;    
+.bottomNavigation button:active{
+    transform: scale(0.8);
 }
 
-.bottomNavigation #sendMessage:active{
-    font-size: 15pt;
+.bottomNavigation #sendMessage{
+    font-size: 18pt;  
+    color: green; 
 }
