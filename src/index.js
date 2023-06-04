@@ -6,10 +6,10 @@ const userList = document.querySelector('.user-list')
 const send = document.getElementById('send')
 const messages = document.querySelector('.messages')
 const currentUserIcon = document.getElementById('user')
-const popup = document.querySelector('.popup-prfile-photo')
 const inputFile = document.getElementById('inputFile')
 const imgProfile = document.getElementById('imgProfile')
 const input = document.getElementById('input')
+const btnSend = document.getElementById('btnSend')
 let user = localStorage.getItem('user')
 let users
 
@@ -79,6 +79,20 @@ socket.on('welcome', id=>{
 })
 
 
+input.addEventListener('input', ()=>{
+    const msgTemp = document.getElementById('msgTemp')
+    btnSend.style.display = 'block'
+    btnSend.removeAttribute('disabled')
+    msgTemp.style.display = 'none'
+
+    if(input.value === ''){
+        msgTemp.style.display = 'block'
+        btnSend.style.display = 'none'
+        btnSend.setAttribute('disbled', 'true')
+    }
+})
+
+
 send.addEventListener('submit', (event)=>{
     event.preventDefault()
     const messageData = {
@@ -87,6 +101,9 @@ send.addEventListener('submit', (event)=>{
     }
     socket.emit('message', messageData)
     input.value = ''
+    btnSend.setAttribute('disabled', 'true')
+    msgTemp.style.display = 'block'
+    btnSend.style.display = 'none'
     input.focus()
 })
 
