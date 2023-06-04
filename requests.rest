@@ -2,7 +2,16 @@ POST http://localhost:3003/signup
 Content-Type: application/json
 
 {
+    "id": "var",
     "nickname": "eu"
+}
+
+###
+PATCH http://localhost:3003/changeid/eu
+Content-Type: application/json
+
+{
+    "userId": "25"
 }
 
 ###
@@ -19,4 +28,7 @@ Content-Type: application/json
 GET http://localhost:3003/users
 
 ###
-DELETE http://localhost:3003/signout/88gdf40cgd
+GET http://localhost:3003/user/eu
+
+###
+DELETE http://localhost:3003/signout/eu

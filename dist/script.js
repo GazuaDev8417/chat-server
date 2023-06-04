@@ -1,8 +1,10 @@
+// const url = 'https://chat-jcnn.onrender.com'
+const url = 'http://localhost:3003'
+const socket = io(url)
 const nickname = document.getElementById('nickname')
 const btn = document.getElementById('submitForm')
 const form = document.getElementById('form')
-const url = 'https://chat-jcnn.onrender.com'
-// const url = 'http://localhost:3003'
+
 
 
 window.addEventListener('load', ()=>{
@@ -13,8 +15,6 @@ window.addEventListener('load', ()=>{
     }
 
     form.style.marginTop = '10vh'
-    document.body.style.backgroundImage = "url('https://media.istockphoto.com/id/1218737747/vector/learning-online-e-learning-video-call-chat-with-class-distance-education.jpg?s=612x612&w=0&k=20&c=fFFwc3CTP4XtvmruZLiK8EzAbzvAxJL_kw5BsA7z7w8=')"
-    document.body.style.backgroundSize = 'cover'
     form.style.transition = '2s'
 })
 
@@ -46,21 +46,26 @@ form.addEventListener('submit', (e)=>{
     signup()
 })
 
-
 const signup = ()=>{
-    const body = {
-        nickname: nickname.value
-    }
-    fetch(`${url}/signup`, {
-        method:'POST',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(body)
-    }).then(res => res.text()).then(data=>{
-        localStorage.setItem('user', data)
-        location.href = './pages/chat/index.html'
-    }).catch(e=>{
-        alert(e.message)
+    let id
+    socket.on('welcome', socketId=>{
+        id = socketId
     })
+    console.log(id)
+        const body = {
+            id,
+            nickname: nickname.value
+        }
+        fetch(`${url}/signup`, {
+            method:'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(res => res.json()).then(data=>{
+            localStorage.setItem('user', JSON.stringify(data))
+            location.href = './pages/chat/index.html'
+        }).catch(e=>{
+            alert(e.message)
+        })
 }

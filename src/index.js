@@ -1,6 +1,6 @@
 const io = require('socket.io-client')
-const url = 'https://chat-jcnn.onrender.com'
-// const url = 'http://localhost:3003'
+// const url = 'https://chat-jcnn.onrender.com'
+const url = 'http://localhost:3003'
 const socket = io(url)
 const userList = document.querySelector('.user-list')
 const send = document.getElementById('send')
@@ -11,7 +11,6 @@ const imgProfile = document.getElementById('imgProfile')
 const input = document.getElementById('input')
 const btnSend = document.getElementById('btnSend')
 let user = localStorage.getItem('user')
-let users
 
 
 
@@ -42,7 +41,6 @@ inputFile.addEventListener('change', ()=>{
 
 fetch(`${url}/users`).then(res => res.json()).then(data=>{
     const filtered = data.filter(item => item.nickname !== user)
-    users = data
 
     userList.innerHTML = filtered.map(user=>{
         return`            
@@ -69,13 +67,6 @@ document.getElementById('logout').addEventListener('click', ()=>{
             alert(e.message)
         })
     }
-})
-
-
-let userId
-
-socket.on('welcome', id=>{
-    userId = id
 })
 
 

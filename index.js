@@ -1,17 +1,18 @@
 const express = require('express')
 const cors = require('cors')
+const con = require('./sources/connection/connection')
+const { Server } = require('socket.io')
 const app = express()
 app.use(express.json())
 app.use(cors())
-const { Server } = require('socket.io')
-const con = require('./sources/connection/connection')
+app.use(express.static('./dist'))
 
 
 // SOCKET CONNECTION
 const options = {
     cors: true,
-    origin: ['https://chat-jcnn.onrender.com']
-    // origin: ['http://localhost:3003']
+    // origin: ['https://chat-jcnn.onrender.com']
+    origin: ['http://localhost:3003']
 }
 
 const server = app.listen(3003, ()=>{
@@ -20,7 +21,6 @@ const server = app.listen(3003, ()=>{
 
 const io = new Server(server, options)
 
-app.use(express.static('./dist'))
 
 //CONNETCION CONFIGURATIONS
 io.on('connection', socket=>{
@@ -34,31 +34,22 @@ io.on('connection', socket=>{
     })   
 })
 
-// SHOW PAGES
-app.get('/', (req, res)=>{
-    res.sendFile('index.html')
-})
-
-var statusCode = 400
 
 // =================ENTER WITH USER============================
 app.post('/signup', (req, res)=>{
     try{
-
-        const { nickname } = req.body
+        const { id, nickname } = req.body
         const sql = `INSERT INTO chat_users VALUES(?,?)`
-        const id = Date.now().toString(18)
 
         if(!nickname){
-            statusCode = 401
-            throw new Error('Digite um nome de usuário')
+            res.status(401).send('Digite um nome de usuário')
         }else{
             con.query(sql, [id, nickname], error=>{
                 if(error){
                     if(error.code === 'ER_DUP_ENTRY'){
-                        res.status(406).send(`Jà existe um usuário com esse nome`)
+                        res.status(403).send(`Já existe um usuário com esse nome`)
                     }else{
-                        res.status(500).send(`Falha so registrar usuário: ${error}`)
+                        res.status(500).send(`Falha ao registrar usuário: ${error}`)
                     }
                 }else{
                     res.status(201).send(nickname)                    
@@ -67,47 +58,72 @@ app.post('/signup', (req, res)=>{
         }
                             
     }catch(e){
-        res.status(statusCode).send(e.message || e.sqlMessage )
+        res.status(400).send(e.message || e.sqlMessage )
     }    
 })
 
 // =======================SELECT ALL USERS=================================
 app.get('/users', (req, res)=>{
-    con.query('SELECT * FROM chat_users', (error, users)=>{
-        if(error){
-            res.status(404).send(`Erro ao buscar usuários: ${error}`)
-        }else{
-            res.send(users)
-        }
-    })
+    try{
+        con.query('SELECT * FROM chat_users', (error, users)=>{
+            if(error){
+                res.status(500).send(`Falha ao buscar usuários: ${error}`)
+            }else{
+                res.status(200).send(users)
+            }
+        })
+    }catch(e){
+        res.status(400).send(e.message || e.sqlMessage)
+    }
 })
 
 // =========================ALTER ID===============================
 app.patch('/changeid/:name', (req, res)=>{
-    const { userId } = req.body
+    try{
+        const { userId } = req.body
+        const getuser = `SELECT * FROM chat_users WHERE nickname = '${req.params.name}'`
 
-    con.query(`
-        UPDATE chat_users SET id = '${userId}' WHERE nickname = '${req.params.name}'
-    `, error=>{
-        if(error){
-            res.status(500).send(error)
-        }else{
-            res.send('Id alterado')
-        }
-    })
+        con.query(getuser, (error, user)=>{
+            if(error){
+                res.status(400).send(`Falha ao buscar usuário: ${error}`)
+            }else if(user.length === 0){
+                res.status(404).send(`Usuário não encontrado`)
+            }else{
+                con.query(`
+                    UPDATE chat_users SET id = '${userId}' WHERE nickname = '${req.params.name}'
+                `, (error)=>{
+                    if(error){
+                        res.status(500).send(`Falha ao alterar id: ${error}`)
+                    }else{
+                        res.status(200).send('Id alterado')
+                    }
+                })
+            }
+        })
+    
+    }catch(e){
+        res.status(400).send(e.message || e.sqlMessage)
+    }
 })
 
 // =========================GET USER BY NAME========================
 app.get('/user/:name', (req, res)=>{
-    con.query(`
-        SELECT * FROM chat_users WHERE nickname = '${req.params.name}'
-    `, (error, user)=>{
-        if(error){
-            res.status(500).send()
-        }else{
-            res.send(user[0])
-        }
-    })
+    try{
+
+        const getuser = `SELECT * FROM chat_users WHERE nickname = '${req.params.name}'`
+
+        con.query(getuser, (error, user)=>{
+            if(error){
+                res.status(400).send(`Falha ao buscar usuário: ${error}`)
+            }else if(user.length === 0){
+                res.status(404).send('Usuário não encontrado')
+            }else{
+                res.status(200).send(user[0])
+            }
+        })        
+    }catch(e){
+        res.status(400).send(e.message || e.sqlMessage)
+    }
 })
 
 // ===========================SEND MESSAGES========================
@@ -116,7 +132,6 @@ app.post('/messages', (req, res)=>{
     console.log("backend: ",req.body)
     const getuser = `SELECT * FROM chat_users WHERE nickname = '${sender}'`
     const sql = `INSERT INTO chat_messages VALUES(?,?,?,?)`
-    // const id = Date.now().toString(18)
 
 
     con.query(getuser, (error, user)=>{
@@ -158,8 +173,10 @@ app.delete('/signout/:name', (req, res)=>{
 
     con.query(getuser, (error, user)=>{
         if(error){
-            res.status(404).send(`Usuário não encontrado: ${error}`)
-        }else if(user.length > 0){
+            res.status(400).send(`Falha ao buscar usuário: ${error}`)
+        }else if(user.length === 0){
+            res.status(404).send('Usuário não encontrado')
+        }else{
             con.query(sql, error=>{
                 if(error){
                     res.status(500).send(`Erro ao deslogar usuário: ${error}`)
@@ -170,8 +187,6 @@ app.delete('/signout/:name', (req, res)=>{
                     res.send(`${user[0].nickname} deslogado`)
                 }
             })
-        }else{
-            res.status(404).send(`Usuário não encontrado ${error}`)
         }
     })    
 })
