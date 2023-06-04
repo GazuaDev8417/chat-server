@@ -1,6 +1,8 @@
 body{
     display: flex;
     justify-content: center;
+    background-image: url('https://media.istockphoto.com/id/1218737747/vector/learning-online-e-learning-video-call-chat-with-class-distance-education.jpg?s=612x612&w=0&k=20&c=fFFwc3CTP4XtvmruZLiK8EzAbzvAxJL_kw5BsA7z7w8=');
+    background-size: cover;
 }
 
 #form{
