@@ -1,6 +1,5 @@
-// const url = 'https://chat-jcnn.onrender.com'
-const url = 'http://localhost:3003'
-const socket = io(url)
+const url = 'https://chat-jcnn.onrender.com'
+// const url = 'http://localhost:3003'
 const nickname = document.getElementById('nickname')
 const btn = document.getElementById('submitForm')
 const form = document.getElementById('form')
@@ -43,29 +42,25 @@ const handleMouseOut = ()=>{
 
 form.addEventListener('submit', (e)=>{
     e.preventDefault()
-    signup()
-})
 
-const signup = ()=>{
-    let id
-    socket.on('welcome', socketId=>{
-        id = socketId
-    })
-    console.log(id)
-        const body = {
-            id,
-            nickname: nickname.value
+    const body = {
+        nickname: nickname.value
+    }  
+    fetch(`${url}/signup`, {
+        method:'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(body) 
+    }).then(res =>{
+        if(res.statusText === 'Forbidden'){
+            throw new Error('Já existe um usuário com esse nome')
         }
-        fetch(`${url}/signup`, {
-            method:'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        }).then(res => res.json()).then(data=>{
-            localStorage.setItem('user', JSON.stringify(data))
-            location.href = './pages/chat/index.html'
-        }).catch(e=>{
-            alert(e.message)
-        })
-}
+        res.text()
+    }).then(()=>{
+        localStorage.setItem('user', nickname.value)
+        location.href = './pages/chat/index.html'
+    }).catch(e=>{
+        alert(e.message)
+    })
+})

@@ -11,8 +11,8 @@ app.use(express.static('./dist'))
 // SOCKET CONNECTION
 const options = {
     cors: true,
-    // origin: ['https://chat-jcnn.onrender.com']
-    origin: ['http://localhost:3003']
+    origin: ['https://chat-jcnn.onrender.com']
+    // origin: ['http://localhost:3003']
 }
 
 const server = app.listen(3003, ()=>{
@@ -21,10 +21,11 @@ const server = app.listen(3003, ()=>{
 
 const io = new Server(server, options)
 
-
 //CONNETCION CONFIGURATIONS
+let id
+
 io.on('connection', socket=>{
-    socket.emit('welcome', socket.id)
+    id = socket.id
     socket.join('room1')
     socket.on('message', message=>{
         io.to('room1').emit('receivedMessage', {
@@ -38,7 +39,8 @@ io.on('connection', socket=>{
 // =================ENTER WITH USER============================
 app.post('/signup', (req, res)=>{
     try{
-        const { id, nickname } = req.body
+        const { nickname } = req.body
+        console.log(nickname)
         const sql = `INSERT INTO chat_users VALUES(?,?)`
 
         if(!nickname){

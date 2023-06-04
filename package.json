@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx webpack --mode=production && node index.js",
-    "dev": "npx webpack --mode=development && nodemon index.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "migration": "node ./src/connection/migration.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
