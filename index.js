@@ -11,8 +11,8 @@ app.use(express.static('./dist'))
 // SOCKET CONNECTION
 const options = {
     cors: true,
-    origin: ['https://chat-jcnn.onrender.com']
-    // origin: ['http://localhost:3003']
+    // origin: ['https://chat-jcnn.onrender.com']
+    origin: ['http://localhost:3003']
 }
 
 const server = app.listen(3003, ()=>{
@@ -40,7 +40,6 @@ io.on('connection', socket=>{
 app.post('/signup', (req, res)=>{
     try{
         const { nickname } = req.body
-        console.log(nickname)
         const sql = `INSERT INTO chat_users VALUES(?,?)`
 
         if(!nickname){
@@ -130,8 +129,7 @@ app.get('/user/:name', (req, res)=>{
 
 // ===========================SEND MESSAGES========================
 app.post('/messages', (req, res)=>{
-    const { id, sender, message, sentAt } = req.body    
-    console.log("backend: ",req.body)
+    const { id, sender, message, sentAt } = req.body
     const getuser = `SELECT * FROM chat_users WHERE nickname = '${sender}'`
     const sql = `INSERT INTO chat_messages VALUES(?,?,?,?)`
 

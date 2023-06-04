@@ -9,6 +9,7 @@ body{
     "users main";
     grid-template-columns: 25vw 1fr;
     grid-template-rows: 7vh 1fr;
+    background-image: linear-gradient(rgba(211, 211, 211, 0.8), rgba(128, 128, 128, 0.7));
 
     @media(max-width: 600px){
         display: flex;
@@ -179,6 +180,7 @@ aside .user-list .user{
 
 main{
     grid-area: main;
+    overflow: auto;
     display: grid;
     grid-template-areas: 
     "messages"
@@ -204,7 +206,7 @@ main{
 .message{
     margin: 15px 30px;
     width: 25%;
-    padding: 10px;
+    padding: 0 10px;
     border: 1px solid;
     border-radius: 10px;
     box-shadow: 3px 3px 6px;
@@ -233,6 +235,7 @@ main{
 .messageInfo{
     display: flex;
     justify-content: space-between;
+    margin-bottom: -15px;
 }
 
 
@@ -245,7 +248,7 @@ main{
 }
 
 .bottomNavigation input[type='text']{
-    width: 85%;
+    width: 90%;
     height: 30px;
     border-radius: 10px;
     border: none;
@@ -264,6 +267,7 @@ main{
 }
 
 .bottomNavigation button{
+    background: transparent;
     display: none;
     width: 40px;
     height: 40px;

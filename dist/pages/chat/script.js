@@ -13,7 +13,6 @@ let user = localStorage.getItem('user')
 
 
 
-document.scrollTop = messages.scrollHeight
 document.getElementById('userName').innerHTML = user
 
 currentUserIcon.addEventListener('click', ()=>{
@@ -123,7 +122,6 @@ socket.on('receivedMessage', response=>{
     innerMessage.classList.add('message')
     innerMessage.style.backgroundImage = 'linear-gradient(lightgray, whitesmoke)'
     if(!isOur){
-        innerMessage.classList.add('foreign')
         innerMessage.style.backgroundImage = 'linear-gradient(lightgray, gray)'
     }
     
@@ -152,4 +150,6 @@ socket.on('receivedMessage', response=>{
     textContainer.appendChild(textParagraph)
     
     messages.appendChild(messageContainer)
+
+    messages.scrollTop = messages.scrollHeight
 })
