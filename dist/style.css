@@ -20,12 +20,13 @@ fieldset{
     box-shadow: 3px 3px 6px;
     border-radius: 10px;
 
-    @media(max-width: 600px){
+    @media(max-width: 320px){
         justify-content: center;
+        width: 80vw;
     }
 
-    @media(max-width: 1024px){
-        width: 45vw;
+    @media(max-width: 600px){
+        width: 60vw;
     }
 }
 
