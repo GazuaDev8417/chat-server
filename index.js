@@ -10,7 +10,7 @@ app.use(cors())
 // SOCKET CONNECTION
 const options = {
     cors: true,
-    origin: ['https://chat-jcnn.onrender.com']
+    origin: ['https://chat-phi-woad.vercel.app']
     // origin: ['http://localhost:3003']
 }
 
