@@ -1,5 +1,5 @@
-const url = 'https://chat-jcnn.onrender.com'
-// const url = 'http://localhost:3003'
+// const url = 'https://chat-jcnn.onrender.com'
+const url = 'http://localhost:3003'
 const nickname = document.getElementById('nickname')
 const btn = document.getElementById('submitForm')
 const form = document.getElementById('form')

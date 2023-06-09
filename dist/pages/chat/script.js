@@ -1,5 +1,5 @@
-const url = 'https://chat-jcnn.onrender.com'
-// const url = 'http://localhost:3003'
+// const url = 'https://chat-jcnn.onrender.com'
+const url = 'http://localhost:3003'
 const socket = io(url)
 const userList = document.querySelector('.user-list')
 const send = document.getElementById('send')
@@ -9,7 +9,13 @@ const inputFile = document.getElementById('inputFile')
 const imgProfile = document.getElementById('imgProfile')
 const input = document.getElementById('input')
 const btnSend = document.getElementById('btnSend')
+const inputAttach = document.getElementById('inputAttach')
+const attachImage = document.getElementById('attachImage')
+const modal = document.querySelector('.modal')
+const imageDescription = document.getElementById('imageDescription')
+const sendFile = document.getElementById('sendFile')
 let user = localStorage.getItem('user')
+
 
 
 
@@ -81,9 +87,10 @@ input.addEventListener('input', ()=>{
     }
 })
 
-
+// ====================================SEND MESSAGES==================================
 send.addEventListener('submit', (event)=>{
     event.preventDefault()
+    
     const messageData = {
         sender: user,
         message: input.value
@@ -96,13 +103,10 @@ send.addEventListener('submit', (event)=>{
     input.focus()
 })
 
-
-
+// ==========================RECEIVED AND MESSAGES==========================================
 socket.on('receivedMessage', response=>{
     const isOur = response.sender === user
     const mediaQuery = matchMedia('(max-width: 600px)')
-    const randomNumber = Math.floor(Math.random() * 1000000)
-    const hash = String(randomNumber).split(',')
 
     const messageContainer = document.createElement('div')
     messageContainer.classList.add('messageContainer')
@@ -138,7 +142,7 @@ socket.on('receivedMessage', response=>{
     
     const textContainer = document.createElement('div')
     textContainer.classList.add('textContainer')
-    
+
     const textParagraph = document.createElement('p')
     textParagraph.innerText = response.message
     
@@ -147,7 +151,102 @@ socket.on('receivedMessage', response=>{
     messageInfo.appendChild(username)
     messageInfo.appendChild(date)
     innerMessage.appendChild(textContainer)
-    textContainer.appendChild(textParagraph)
+    textContainer.appendChild(textParagraph)    
+    
+    messages.appendChild(messageContainer)
+
+    messages.scrollTop = messages.scrollHeight
+})
+
+// ==============================SEND FILES========================================
+document.getElementById('attach').addEventListener('click', ()=>{
+    inputAttach.click()
+})
+
+inputAttach.addEventListener('change', ()=>{
+    const file = inputAttach.files[0]
+    const fileReader = new FileReader()
+
+    if(file){
+        fileReader.readAsDataURL(file)
+    }
+
+    fileReader.addEventListener('load', ()=>{        
+        attachImage.src = fileReader.result
+        
+        sendFile.addEventListener('submit', (e)=>{
+            e.preventDefault()
+            
+            socket.emit('file', {
+                sender: user,
+                file: fileReader.result,
+                legend: imageDescription.value
+            })
+            modal.style.display = 'none'        
+        })
+    })
+
+    fileReader.addEventListener('loadend', ()=>{
+        modal.style.display = 'flex'
+    })
+})
+
+document.getElementById('close').addEventListener('click', ()=>{
+    modal.style.display = 'none'
+})
+
+// ================================RECEIVE FILES=============================
+socket.on('receivedFile', response=>{
+    const isOur = response.sender === user
+    const mediaQuery = matchMedia('(max-width: 600px)')
+
+    const messageContainer = document.createElement('div')
+    messageContainer.classList.add('messageContainer')
+    if(!isOur) messageContainer.classList.add('left')
+
+    const ifMatchesChange = ()=>{
+        if(mediaQuery.matches){     
+            if(isOur) messageContainer.classList.add('right')
+        }else{
+            messageContainer.classList.add('left')
+        }
+    }
+
+    mediaQuery.addEventListener('change', ifMatchesChange)
+    
+    const innerMessage = document.createElement('div')
+    innerMessage.classList.add('message')
+    innerMessage.style.backgroundImage = 'linear-gradient(lightgray, whitesmoke)'
+    if(!isOur){
+        innerMessage.style.backgroundImage = 'linear-gradient(lightgray, gray)'
+    }
+    
+    const messageInfo = document.createElement('div')
+    messageInfo.classList.add('messageInfo')
+    
+    const username = document.createElement('p')
+    username.classList.add('username')
+    username.innerHTML = response.sender
+    
+    const date = document.createElement('p')
+    date.classList.add('date')
+    date.innerHTML = `<small>${new Date().toLocaleTimeString()}</small>`    
+    
+    const fileContainer = document.createElement('div')
+    fileContainer.classList.add('fileContainer')
+
+    const fileParagraph = document.createElement('p')
+    fileParagraph.innerHTML = `
+        <img class='fileContent' src='${response.file}'>
+        <div style='text-align:left;'>${response.legend}</div>
+    `
+    
+    messageContainer.appendChild(innerMessage)
+    innerMessage.appendChild(messageInfo)
+    messageInfo.appendChild(username)
+    messageInfo.appendChild(date)
+    innerMessage.appendChild(fileContainer)
+    fileContainer.appendChild(fileParagraph)    
     
     messages.appendChild(messageContainer)
 

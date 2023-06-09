@@ -27,6 +27,20 @@
         <div class="user-list"></div>
     </aside>
     <main>
+        <div class="modal">
+            <i class="fa-sharp fa-solid fa-xmark" id="close"></i>
+            <img alt="attachImage" id="attachImage">
+            <form id="sendFile">
+                <div class="inputContainer">
+                    <input type="text" id="imageDescription" autofocus
+                        placeholder="Mensagem">
+                    <button type="submit">
+                        <i  id="sendMessage"
+                            class="fa-sharp fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
         <div class="messages">
             <!-- <div class="messageContainer left">
                 <div class="message foreign">
@@ -35,10 +49,23 @@
                         <p class="date">03.12.22 18:13</p>
                     </div>
                     <div class="textContainer">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est blanditiis maiores voluptatum ducimus veniam asperiores distinctio porro quam numquam eos?</p>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est blanditiis maiores voluptatum ducimus veniam asperiores distinctio porro quam numquam eos?</p>                        
                     </div>
                 </div>
             </div>
+
+            <div class="messageContainer left">
+                <div class="message foreign">
+                    <div class="messageInfo">
+                        <p class="username">Jake</p>
+                        <p class="date">03.12.22 18:13</p>
+                    </div>
+                    <div class="imageContainer" style="text-align: center;">
+                        <p><img src="https://picsum.photos/200/200?a=1" alt="randomImage"></p>                        
+                    </div>
+                </div>
+            </div>
+            
             <div class="messageContainer">
                 <div class="message">
                     <div class="messageInfo">
@@ -49,9 +76,24 @@
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est blanditiis maiores voluptatum ducimus veniam asperiores distinctio porro quam numquam eos?</p>
                     </div>
                 </div>
+            </div>
+
+            <div class="messageContainer">
+                <div class="message">
+                    <div class="messageInfo">
+                        <p class="username">Jack</p>
+                        <p class="date">03.12.22 18:14</p>
+                    </div>
+                    <div class="imageContainer">
+                        <p><img src="https://picsum.photos/200/200?a=2" alt="randomImage"></p>
+                    </div>
+                </div>
             </div> -->
         </div>
         <form class="bottomNavigation" id="send">
+            <input type="file" style="display: none;" id="inputAttach">
+            <i  id="attach"
+                class="fa-sharp fa-regular fa-paperclip"></i>
             <input placeholder="Mensagem" 
                 type="text" id="input" autofocus>
             <button type="submit" disabled id="btnSend">
