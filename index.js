@@ -1,12 +1,10 @@
 const express = require('express')
 const cors = require('cors')
-const fs = require('fs')
 const { Server } = require('socket.io')
 const con = require('./sources/connection/connection')
 const app = express()
 app.use(express.json())
 app.use(cors())
-app.use(express.static('./dist'))
 
 
 // SOCKET CONNECTION
@@ -31,7 +29,9 @@ io.on('connection', socket=>{
     socket.on('message', message=>{
         io.to('room1').emit('receivedMessage', {
             sender: message.sender,
-            message: message.message
+            message: message.message,
+            description: message.description,
+            file: message.file
         })
     })
 
