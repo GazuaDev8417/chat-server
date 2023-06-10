@@ -1,7 +1,11 @@
 const express = require('express')
 const cors = require('cors')
 const { Server } = require('socket.io')
+const multer = require('multer')
 const con = require('./sources/connection/connection')
+
+
+
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -13,6 +17,17 @@ const options = {
     // origin: ['https://chat-phi-woad.vercel.app']
     origin: ['http://localhost:3003']
 }
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb)=>{
+        cb(null, 'sources/uploads')
+    },
+    filename: (req, file, cb)=>{
+        cb(null, file.originalname)
+    }
+})
+
+const upload = multer({ storage })
 
 const server = app.listen(3003, ()=>{
     console.log('Servidor rondando em na porta 3003')
@@ -99,7 +114,8 @@ app.get('/user/:name', (req, res)=>{
 })
 
 // ===========================SEND MESSAGES========================
-app.post('/messages', (req, res)=>{
+app.post('/messages', upload.single('files'), (req, res)=>{
+    const uploadedFile = req.file
     const { sender, message, description, filename } = req.body
     const getuser = `SELECT * FROM chat_users WHERE nickname = '${sender}'`
     const sql = `INSERT INTO chat_messages VALUES(?,?,?,?,?)`
@@ -126,6 +142,7 @@ app.post('/messages', (req, res)=>{
 })
 
 // ==========================GET ALL MESSAGES=============================
+app.use('/display-files', express.static('sources/uploads'))
 app.get('/messages', (req, res)=>{
     con.query('SELECT * FROM chat_messages', (error, messages)=>{
         if(error){

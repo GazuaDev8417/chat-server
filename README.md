@@ -1,7 +1,3 @@
-# chat
+# Chat-server
 
-Aplicação de sala de bate papo em tempo real.<br><br>
-
-<img src='./readmeImg/chat.png'><br>
-
-> https://chat-jcnn.onrender.com
+Lado servidor de aplicação para sala de bate-papo. Aplicação API backend utlizava nodejs com javascript puro, sem nenhum outro framework ou biblioteca para fazer suas requisições.
