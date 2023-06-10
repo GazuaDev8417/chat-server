@@ -34,35 +34,38 @@ io.on('connection', socket=>{
             file: message.file            
         })
     })
-})
 
-
-// =================ENTER WITH USER============================
-app.post('/signup', (req, res)=>{
-    try{
-        const { nickname } = req.body
-        const sql = `INSERT INTO chat_users VALUES(?,?)`
-
-        if(!nickname){
-            res.status(401).send('Digite um nome de usuário')
-        }else{
-            con.query(sql, [id, nickname], error=>{
-                if(error){
-                    if(error.code === 'ER_DUP_ENTRY'){
-                        res.status(403).send(`Já existe um usuário com esse nome`)
+    // =================ENTER WITH USER============================
+    app.post('/signup', (req, res)=>{
+        try{
+            const { nickname } = req.body
+            const sql = `INSERT INTO chat_users VALUES(?,?)`
+    
+            if(!nickname){
+                res.status(401).send('Digite um nome de usuário')
+            }else{
+                con.query(sql, [socket.id, nickname], error=>{
+                    if(error){
+                        if(error.code === 'ER_DUP_ENTRY'){
+                            res.status(403).send(`Já existe um usuário com esse nome`)
+                        }else{
+                            res.status(500).send(`Falha ao registrar usuário: ${error}`)
+                        }
                     }else{
-                        res.status(500).send(`Falha ao registrar usuário: ${error}`)
+                        res.status(201).send(nickname)                    
                     }
-                }else{
-                    res.status(201).send(nickname)                    
-                }
-            })
-        }
-                            
-    }catch(e){
-        res.status(400).send(e.message || e.sqlMessage )
-    }    
+                })
+            }
+                                
+        }catch(e){
+            res.status(400).send(e.message || e.sqlMessage )
+        }    
+    })
+
 })
+
+
+
 
 // =======================SELECT ALL USERS=================================
 app.get('/users', (req, res)=>{
