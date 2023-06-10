@@ -10,8 +10,8 @@ app.use(cors())
 // SOCKET CONNECTION
 const options = {
     cors: true,
-    origin: ['https://chat-phi-woad.vercel.app']
-    // origin: ['http://localhost:3003']
+    // origin: ['https://chat-phi-woad.vercel.app']
+    origin: ['http://localhost:3003']
 }
 
 const server = app.listen(3003, ()=>{
@@ -21,10 +21,8 @@ const server = app.listen(3003, ()=>{
 const io = new Server(server, options)
 
 //CONNETCION CONFIGURATIONS
-let id
 
 io.on('connection', socket=>{
-    id = socket.id
     socket.join('room1')
     socket.on('message', message=>{
         io.to('room1').emit('receivedMessage', {
@@ -34,39 +32,37 @@ io.on('connection', socket=>{
             file: message.file            
         })
     })
-
-    // =================ENTER WITH USER============================
-    app.post('/signup', (req, res)=>{
-        try{
-            const { nickname } = req.body
-            const sql = `INSERT INTO chat_users VALUES(?,?)`
-    
-            if(!nickname){
-                res.status(401).send('Digite um nome de usuário')
-            }else{
-                con.query(sql, [socket.id, nickname], error=>{
-                    if(error){
-                        if(error.code === 'ER_DUP_ENTRY'){
-                            res.status(403).send(`Já existe um usuário com esse nome`)
-                        }else{
-                            res.status(500).send(`Falha ao registrar usuário: ${error}`)
-                        }
-                    }else{
-                        res.status(201).send(nickname)                    
-                    }
-                })
-            }
-                                
-        }catch(e){
-            res.status(400).send(e.message || e.sqlMessage )
-        }    
-    })
-
 })
 
 
+ // =================ENTER WITH USER============================
+app.post('/signup', (req, res)=>{
+    try{
+        const { nickname } = req.body
+        const sql = `INSERT INTO chat_users VALUES(?,?)`
+        const id = Date.now().toString(18)
 
-
+        if(!nickname){
+            res.status(401).send('Digite um nome de usuário')
+        }else{
+            con.query(sql, [id, nickname], error=>{
+                if(error){
+                    console.log(error)
+                    if(error.code === 'ER_DUP_ENTRY'){
+                        res.status(403).send(`Já existe um usuário com esse nome`)
+                    }else{
+                        res.status(500).send(`Falha ao registrar usuário: ${error}`)
+                    }
+                }else{
+                    res.status(201).send(nickname)                    
+                }
+            })
+        }
+                            
+    }catch(e){
+        res.status(400).send(e.message || e.sqlMessage )
+    }    
+})
 // =======================SELECT ALL USERS=================================
 app.get('/users', (req, res)=>{
     try{
@@ -77,35 +73,6 @@ app.get('/users', (req, res)=>{
                 res.status(200).send(users)
             }
         })
-    }catch(e){
-        res.status(400).send(e.message || e.sqlMessage)
-    }
-})
-
-// =========================ALTER ID===============================
-app.patch('/changeid/:name', (req, res)=>{
-    try{
-        const { userId } = req.body
-        const getuser = `SELECT * FROM chat_users WHERE nickname = '${req.params.name}'`
-
-        con.query(getuser, (error, user)=>{
-            if(error){
-                res.status(400).send(`Falha ao buscar usuário: ${error}`)
-            }else if(user.length === 0){
-                res.status(404).send(`Usuário não encontrado`)
-            }else{
-                con.query(`
-                    UPDATE chat_users SET id = '${userId}' WHERE nickname = '${req.params.name}'
-                `, (error)=>{
-                    if(error){
-                        res.status(500).send(`Falha ao alterar id: ${error}`)
-                    }else{
-                        res.status(200).send('Id alterado')
-                    }
-                })
-            }
-        })
-    
     }catch(e){
         res.status(400).send(e.message || e.sqlMessage)
     }
@@ -133,9 +100,10 @@ app.get('/user/:name', (req, res)=>{
 
 // ===========================SEND MESSAGES========================
 app.post('/messages', (req, res)=>{
-    const { id, sender, message, sentAt } = req.body
+    const { sender, message, description, filename } = req.body
     const getuser = `SELECT * FROM chat_users WHERE nickname = '${sender}'`
-    const sql = `INSERT INTO chat_messages VALUES(?,?,?,?)`
+    const sql = `INSERT INTO chat_messages VALUES(?,?,?,?,?)`
+    const id = Date.now().toString(18)
 
 
     con.query(getuser, (error, user)=>{
@@ -143,7 +111,7 @@ app.post('/messages', (req, res)=>{
             res.status(404).send(`Usuário não encontrado: ${error}`)
         }else{
             if(user.length > 0){
-                con.query(sql, [id, user[0].nickname, message, sentAt], error=>{
+                con.query(sql, [id, user[0].nickname, message, description, filename], error=>{
                     if(error){
                         res.status(500).send(`Falha ao enviar messagem: ${error}`)
                     }else{
@@ -185,9 +153,9 @@ app.delete('/signout/:name', (req, res)=>{
                 if(error){
                     res.status(500).send(`Erro ao deslogar usuário: ${error}`)
                 }else{
-                    // con.query(`
-                    //     DELETE FROM chat_messages WHERE sender = '${user[0].nickname}'
-                    // `)
+                    con.query(`
+                        DELETE FROM chat_messages WHERE sender = '${user[0].nickname}'
+                    `)
                     res.send(`${user[0].nickname} deslogado`)
                 }
             })
