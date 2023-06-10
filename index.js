@@ -31,12 +31,8 @@ io.on('connection', socket=>{
             sender: message.sender,
             message: message.message,
             description: message.description,
-            file: message.file
+            file: message.file            
         })
-    })
-
-    socket.on('file', data=>{
-        io.to('room1').emit('receivedFile', data)
     })
 })
 
