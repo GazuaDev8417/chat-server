@@ -14,8 +14,8 @@ app.use(cors())
 // SOCKET CONNECTION
 const options = {
     cors: true,
-    origin: ['https://chat-phi-woad.vercel.app']
-    //origin: ['http://localhost:3003']
+    // origin: ['https://chat-phi-woad.vercel.app']
+    origin: ['http://localhost:3003']
 }
 
 const storage = multer.diskStorage({
